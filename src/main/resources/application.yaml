@@ -1,0 +1,65 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: hmdp
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/hmdp?useSSL=false&serverTimezone=UTC
+    username: root
+    password:
+  redis:
+    host:
+    port: 6379
+    password:
+    lettuce:
+      pool:
+        max-active: 10
+        max-idle: 10
+        min-idle: 1
+        time-between-eviction-runs: 10s
+  jackson:
+    default-property-inclusion: non_null # JSON处理时忽略非空字段
+  rabbitmq:
+    #服务器
+    host:
+    #用户名
+    username: guest
+    #密码
+    password: guest
+    #虚拟主机
+    virtual-host: /
+    #端口
+    port: 5672
+    listener:
+      simple:
+        #消费者最小数量
+        concurrency: 1
+        #消费者最大数量
+        max-concurrency: 10
+        #通过设置prefetch来控制消费者预取的消息数量
+        #值为1表示限制消费者每次只能获取一条消息，处理完成后才能获取下一条消息，默认值无穷大
+        prefetch: 1
+        #启动时是否默认启动容器
+        auto-startup: true
+        #被拒绝时重新进入队列
+        default-requeue-rejected: true
+    template:
+      retry:
+        #没有发送成功，是否重新发送
+        enabled: true
+        #重试时间，默认1000ms
+        initial-interval: 1000ms
+        #重试最大次数，默认3次
+        max-attempts: 3
+        #重试最大间隔时间，默认10000ms
+        max-interval: 10000ms
+        #重试时间隔乘数，比如配2.0，第一次就等待10s，第二次等待20s，第三次等待40s
+        multiplier: 1
+
+
+mybatis-plus:
+  type-aliases-package: com.hmdp.entity # 别名扫描包
+logging:
+  level:
+    com.hmdp: debug
